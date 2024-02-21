@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.actions.act_window" id="tournament_list">
+        <field name="name">Tournament</field>
+        <field name="res_model">gametournament.tournament</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Create the first Tournament</p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="tournament_tree_view">
+        <field name="name">tournament.tree</field>
+        <field name="model">gametournament.tournament</field>
+        <field name="arch" type="xml">
+            <tree string="Vista de torneos">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="logo_resized" widget="image" />
+                <field name="prize"/>
+                <field name="start_date"/>
+                <field name="due_date"/>
+                <field name="organizer_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="inscription_list">
+        <field name="name">Inscriptions</field>
+        <field name="res_model">gametournament.inscription</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="main_tournament_menu" name="Open Tournament" action="tournament_list"/>
+    <menuitem id="opentournament_menu" name="Open Tournament"  parent="main_tournament_menu"/>
+    <menuitem id="tournament_menu" name="Tournament"  parent="opentournament_menu" action="tournament_list"/>
+    <menuitem id="inscription_menu" name="Inscription"  parent="opentournament_menu" action="inscription_list"/>
+
+</odoo>
