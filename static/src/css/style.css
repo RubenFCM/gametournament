@@ -1,0 +1,5 @@
+
+.logo_tournament img {
+    max-height: 120px; /* Establece el tamaño máximo de la imagen */
+    width: auto; /* Ajusta automáticamente el ancho para mantener la proporción */
+}

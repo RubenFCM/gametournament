@@ -18,18 +18,11 @@ import base64
 #     def _value_pc(self):
 #         for record in self:
 #             record.value2 = float(record.value) / 100
-import base64
-import io
-from PIL import Image  # Asegúrate de importar la clase Image desde PIL
 from odoo import models, fields, api
-import logging
-_logger = logging.getLogger(__name__)
-
-
 class Tournament(models.Model):
     _name = 'gametournament.tournament'
     name = fields.Char(string="Name", required=True, help="Nombre del torneo")
-    logo = fields.Image(string="Logo", help="Logo del torneo", maxheight=120)
+    logo = fields.Image(string="Logo", help="Logo del torneo")
     description = fields.Text()
     prize = fields.Float(string="Prize")
     start_date = fields.Date()
@@ -41,12 +34,11 @@ class Tournament(models.Model):
     inscription_id = fields.One2many('gametournament.inscription', 'inscription_id', string="Inscription")
 
 
-
-
-
 class Inscription(models.Model):
     _name = 'gametournament.inscription'
 
-    name = fields.Char(string="Name Team", required=True)
+    # name = fields.Char(string="Name Team or player", required=True)
+    name_id = fields.Many2one('res.partner', ondelete='set null', string="Name Team or player")
+    date_inscription = fields.Date()
 
     inscription_id = fields.Many2one('gametournament.tournament', ondelete='cascade', string="Tournament", required=True)
