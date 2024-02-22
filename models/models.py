@@ -22,14 +22,14 @@ import base64
 import io
 from PIL import Image  # Asegúrate de importar la clase Image desde PIL
 from odoo import models, fields, api
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class Tournament(models.Model):
     _name = 'gametournament.tournament'
     name = fields.Char(string="Name", required=True, help="Nombre del torneo")
-    logo = fields.Image(string="Logo", help="Logo del torneo", max_width=300, max_height=200)
-    # Campos ocultos para almacenar la versión redimensionada de la imagen
-    logo_resized = fields.Binary(string="Resized Logo", compute='_compute_resized_logo', invisible=1)
+    logo = fields.Image(string="Logo", help="Logo del torneo", maxheight=120)
     description = fields.Text()
     prize = fields.Float(string="Prize")
     start_date = fields.Date()
@@ -40,18 +40,7 @@ class Tournament(models.Model):
 
     inscription_id = fields.One2many('gametournament.inscription', 'inscription_id', string="Inscription")
 
-    @api.depends('logo')
-    def _compute_resized_logo(self):
-        for record in self:
-            if record.logo:
-                record.logo_resized = self._resize_image(record.logo, 100, 100)
 
-    def _resize_image(self, image, max_width, max_height):
-        img = Image.open(io.BytesIO(base64.b64decode(image)))
-        img.thumbnail((max_width, max_height), Image.ANTIALIAS)
-        buffered = io.BytesIO()
-        img.save(buffered, format="PNG")
-        return base64.b64encode(buffered.getvalue())
 
 
 

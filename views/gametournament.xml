@@ -16,7 +16,7 @@
             <tree string="Vista de torneos">
                 <field name="name"/>
                 <field name="description"/>
-                <field name="logo_resized" widget="image" />
+                <field name="logo" widget="image" />
                 <field name="prize"/>
                 <field name="start_date"/>
                 <field name="due_date"/>
