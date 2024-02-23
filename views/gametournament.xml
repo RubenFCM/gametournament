@@ -16,13 +16,22 @@
             <tree string="Vista de torneos">
                 <field name="name"/>
                 <field name="description"/>
-                <field name="logo" widget="image" />
+                <field name="logo" widget="image" options='{"size":[60,80]}'/>
                 <field name="prize"/>
                 <field name="start_date"/>
                 <field name="due_date"/>
                 <field name="organizer_id"/>
             </tree>
         </field>
+    </record>
+    <record model="ir.ui.view" id="tournament_search_view">
+            <field name="name">tournament.search</field>
+            <field name="model">gametournament.tournament</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
     </record>
 
     <record model="ir.actions.act_window" id="inscription_list">
@@ -31,9 +40,103 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record model="ir.ui.view" id="tournament_form_view">
+        <field name="name">tournament.form</field>
+            <field name="model">gametournament.tournament</field>
+            <field name="arch" type="xml">
+                <form string="Tournament Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="logo" widget="image" options='{"size":[60,80]}'/>
+                            <field name="description"/>
+                            <field name="prize"/>
+                            <field name="start_date"/>
+                            <field name="due_date"/>
+                            <field name="organizer_id"/>
+                        </group>
+                         <notebook>
+                            <page string="Description">
+                                <field name="description"/>
+                            </page>
+                         <page string="Inscription">
+                              <field name="inscription_id">
+                                  <tree string="Inscription">
+                                      <field name="name_display"/>
+                                      <field name="date_inscription"/>
+                                      <field name="inscription_id"/>
+                                  </tree>
+                              </field>
+                         </page>
+                         <page string="Game">
+                             <field name="game_id">
+                                 <tree string="Game">
+                                     <field name="name"/>
+                                     <field name="gender"/>
+                                     <field name="platform"/>
+                                     <field name="description"/>
+                                 </tree>
+                             </field>
+                         </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="inscription_tree_view">
+        <field name="name">inscription.tree</field>
+        <field name="model">gametournament.inscription</field>
+        <field name="arch" type="xml">
+            <tree string="Vista de inscripciones">
+                <field name="name_display"/>
+                <field name="date_inscription"/>
+                <field name="inscription_id"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="inscription_search_view">
+            <field name="name">inscription.search</field>
+            <field name="model">gametournament.inscription</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name_display"/>
+                </search>
+            </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game_list">
+        <field name="name">Games</field>
+        <field name="res_model">gametournament.game</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="game_tree_view">
+        <field name="name">game.tree</field>
+        <field name="model">gametournament.game</field>
+        <field name="arch" type="xml">
+            <tree string="Vista de juegos">
+                <field name="name"/>
+                <field name="gender"/>
+                <field name="platform"/>
+                <field name="description"/>
+                <field name="tournament_names"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="game_search_view">
+            <field name="name">game.search</field>
+            <field name="model">gametournament.game</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+    </record>
     <menuitem id="main_tournament_menu" name="Open Tournament" action="tournament_list"/>
     <menuitem id="opentournament_menu" name="Open Tournament"  parent="main_tournament_menu"/>
     <menuitem id="tournament_menu" name="Tournament"  parent="opentournament_menu" action="tournament_list"/>
     <menuitem id="inscription_menu" name="Inscription"  parent="opentournament_menu" action="inscription_list"/>
+    <menuitem id="game_menu" name="Game"  parent="opentournament_menu" action="game_list"/>
 
 </odoo>
