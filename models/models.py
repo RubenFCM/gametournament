@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import base64
 
-
 # from odoo import models, fields, api
 
 
@@ -20,6 +19,9 @@ import base64
 #             record.value2 = float(record.value) / 100
 
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+
+
 class Tournament(models.Model):
     _name = 'gametournament.tournament'
     name = fields.Char(string="Name", required=True, help="Nombre del torneo")
@@ -34,7 +36,8 @@ class Tournament(models.Model):
 
     inscription_id = fields.One2many('gametournament.inscription', 'inscription_id', string="Inscription")
 
-    game_id = fields.Many2many('gametournament.game','game_tournament_rel', 'tournament_id', 'game_id',ondelete='cascade', string="Game", auto_join=True)
+    game_id = fields.Many2many('gametournament.game', 'game_tournament_rel', 'tournament_id', 'game_id',
+                               ondelete='cascade', string="Game", auto_join=True)
 
 
 class Inscription(models.Model):
@@ -47,11 +50,22 @@ class Inscription(models.Model):
     inscription_id = fields.Many2one('gametournament.tournament', ondelete='cascade', string="Tournament",
                                      required=True)
 
+    # Mostrar el nombre de equipo o jugadores inscritos y no el número de registros
     @api.depends('name_id')
     def _compute_name_display(self):
         for record in self:
             names = ", ".join(record.name_id.mapped('name'))
             record.name_display = names
+
+    # Controlar si un equipo o jugador ya se encuentra registrado en un torneo
+    @api.constrains('name_id', 'inscription_id')
+    def _check_duplicate_registration(self):
+        for inscription in self:
+            existing_inscription = self.search(
+                [('id', '!=', inscription.id), ('name_id', 'in', inscription.name_id.ids),
+                 ('inscription_id', '=', inscription.inscription_id.id)])
+            if existing_inscription:
+                raise ValidationError("This team or player is already registered in this tournament!")
 
 
 class Game(models.Model):
@@ -63,10 +77,12 @@ class Game(models.Model):
     description = fields.Text()
     # game_id = fields.Many2many('gametournament.tournament', ondelete='cascade', string='Tournament')
     # games = fields.Char(string="Game Names", compute='_compute_name_display')
-    tournament_ids = fields.Many2many('gametournament.tournament', 'game_tournament_rel', 'game_id', 'tournament_id',string='Tournaments',auto_join=True)
+    tournament_ids = fields.Many2many('gametournament.tournament', 'game_tournament_rel', 'game_id', 'tournament_id',
+                                      string='Tournaments', auto_join=True)
 
-    tournament_names = fields.Char(ondelete='cascade',string="Tournament Names", compute='_compute_tournament_names')
+    tournament_names = fields.Char(ondelete='cascade', string="Tournament Names", compute='_compute_tournament_names')
 
+    # Mostrar el nombre de los torneos y no el número de registros
     @api.depends('tournament_ids')
     def _compute_tournament_names(self):
         for game in self:

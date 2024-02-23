@@ -24,6 +24,7 @@
             </tree>
         </field>
     </record>
+
     <record model="ir.ui.view" id="tournament_search_view">
             <field name="name">tournament.search</field>
             <field name="model">gametournament.tournament</field>
@@ -42,42 +43,42 @@
 
     <record model="ir.ui.view" id="tournament_form_view">
         <field name="name">tournament.form</field>
-            <field name="model">gametournament.tournament</field>
-            <field name="arch" type="xml">
-                <form string="Tournament Form">
-                    <sheet>
-                        <group>
-                            <field name="name"/>
-                            <field name="logo" widget="image" options='{"size":[60,80]}'/>
+        <field name="model">gametournament.tournament</field>
+        <field name="arch" type="xml">
+            <form string="Tournament Form">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="logo" widget="image" options='{"size":[60,80]}'/>
+                        <field name="description"/>
+                        <field name="prize"/>
+                        <field name="start_date"/>
+                        <field name="due_date"/>
+                        <field name="organizer_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
                             <field name="description"/>
-                            <field name="prize"/>
-                            <field name="start_date"/>
-                            <field name="due_date"/>
-                            <field name="organizer_id"/>
-                        </group>
-                         <notebook>
-                            <page string="Description">
-                                <field name="description"/>
-                            </page>
-                         <page string="Inscription">
-                              <field name="inscription_id">
-                                  <tree string="Inscription">
-                                      <field name="name_display"/>
-                                      <field name="date_inscription"/>
-                                      <field name="inscription_id"/>
-                                  </tree>
-                              </field>
-                         </page>
-                         <page string="Game">
-                             <field name="game_id">
-                                 <tree string="Game">
-                                     <field name="name"/>
-                                     <field name="gender"/>
-                                     <field name="platform"/>
-                                     <field name="description"/>
-                                 </tree>
-                             </field>
-                         </page>
+                        </page>
+                        <page string="Inscription">
+                            <field name="inscription_id">
+                                <tree string="Inscription">
+                                    <field name="name_display"/>
+                                    <field name="date_inscription"/>
+                                    <field name="inscription_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Game">
+                            <field name="game_id">
+                                <tree string="Game">
+                                    <field name="name"/>
+                                    <field name="gender"/>
+                                    <field name="platform"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
@@ -95,12 +96,32 @@
             </tree>
         </field>
     </record>
+    <record model="ir.ui.view" id="inscription_form_view">
+        <field name="name">inscription.form</field>
+        <field name="model">gametournament.inscription</field>
+        <field name="arch" type="xml">
+            <form string="Inscription Form">
+                <sheet>
+                    <group>
+                        <field name="name_display"/>
+                        <field name="date_inscription"/>
+                        <field name="inscription_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Name team or player">
+                            <field name="name_id"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
     <record model="ir.ui.view" id="inscription_search_view">
             <field name="name">inscription.search</field>
             <field name="model">gametournament.inscription</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="name_display"/>
+                    <field name="name_id"/>
                 </search>
             </field>
     </record>
