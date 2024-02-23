@@ -29,7 +29,7 @@ class Tournament(models.Model):
     description = fields.Text()
     prize = fields.Float(string="Prize")
     start_date = fields.Date()
-
+    participants = fields.Integer(string="Number of participants")
     organizer_id = fields.Many2one('res.company', ondelete='set null', string="Organizer")
 
     due_date = fields.Date()
@@ -39,6 +39,16 @@ class Tournament(models.Model):
     game_id = fields.Many2many('gametournament.game', 'game_tournament_rel', 'tournament_id', 'game_id',
                                ondelete='cascade', string="Game", auto_join=True)
 
+    # Participantes en el torneo
+    taken_participants = fields.Float(string="Taken participants", compute="_taken_participants")
+
+    @api.depends('participants','inscription_id')
+    def _taken_participants(self):
+        for p in self:
+            if not p.participants:
+                p.taken_participants = 0.0
+            else:
+                p.taken_participants = 100.0 * len(p.inscription_id) / p.participants
 
 class Inscription(models.Model):
     _name = 'gametournament.inscription'
@@ -66,6 +76,26 @@ class Inscription(models.Model):
                  ('inscription_id', '=', inscription.inscription_id.id)])
             if existing_inscription:
                 raise ValidationError("This team or player is already registered in this tournament!")
+
+    @api.model
+    def create(self, values):
+        # Check if the tournament has reached its maximum participants
+        tournament_id = values.get('inscription_id')
+        tournament = self.env['gametournament.tournament'].browse(tournament_id)
+        if tournament.taken_participants >= tournament.participants:
+            raise ValidationError("Maximum number of participants reached for this tournament!")
+
+        return super(Inscription, self).create(values)
+
+    def write(self, values):
+        if 'inscription_id' in values:
+            # Check if the tournament has reached its maximum participants
+            tournament_id = values.get('inscription_id')
+            tournament = self.env['gametournament.tournament'].browse(tournament_id)
+            if tournament.taken_participants >= tournament.participants:
+                raise ValidationError("Maximum number of participants reached for this tournament!")
+
+        return super(Inscription, self).write(values)
 
 
 class Game(models.Model):

@@ -21,6 +21,7 @@
                 <field name="start_date"/>
                 <field name="due_date"/>
                 <field name="organizer_id"/>
+                <field name="taken_participants" widget="progressbar"/>
             </tree>
         </field>
     </record>
@@ -55,6 +56,8 @@
                         <field name="start_date"/>
                         <field name="due_date"/>
                         <field name="organizer_id"/>
+                        <field name="participants"/>
+                        <field name="taken_participants" widget="progressbar"/>
                     </group>
                     <notebook>
                         <page string="Description">
