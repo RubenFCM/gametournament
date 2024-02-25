@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "gametournament",
+    'name': "Game Tournament",
 
     'summary': """
         Torneos de videojuegos""",

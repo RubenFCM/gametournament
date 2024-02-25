@@ -40,7 +40,7 @@ class Tournament(models.Model):
                                ondelete='cascade', string="Game", auto_join=True)
 
     # Participantes en el torneo
-    taken_participants = fields.Float(string="Taken participants", compute="_taken_participants")
+    taken_participants = fields.Float(string="Total participants", compute="_taken_participants")
 
     @api.depends('participants','inscription_id')
     def _taken_participants(self):
@@ -82,20 +82,20 @@ class Inscription(models.Model):
         # Check if the tournament has reached its maximum participants
         tournament_id = values.get('inscription_id')
         tournament = self.env['gametournament.tournament'].browse(tournament_id)
-        if tournament.taken_participants >= tournament.participants:
-            raise ValidationError("Maximum number of participants reached for this tournament!")
+        if tournament.taken_participants >= 100.00:
+            raise ValidationError(f"Maximum number of participants reached for this tournament!")
 
         return super(Inscription, self).create(values)
 
-    def write(self, values):
-        if 'inscription_id' in values:
-            # Check if the tournament has reached its maximum participants
-            tournament_id = values.get('inscription_id')
-            tournament = self.env['gametournament.tournament'].browse(tournament_id)
-            if tournament.taken_participants >= tournament.participants:
-                raise ValidationError("Maximum number of participants reached for this tournament!")
-
-        return super(Inscription, self).write(values)
+    # def write(self, values):
+    #     if 'inscription_id' in values:
+    #         # Check if the tournament has reached its maximum participants
+    #         tournament_id = values.get('inscription_id')
+    #         tournament = self.env['gametournament.tournament'].browse(tournament_id)
+    #         if tournament.taken_participants >= tournament.participants:
+    #             raise ValidationError("Maximum number of participants reached for this tournament!")
+    # 
+    #     return super(Inscription, self).write(values)
 
 
 class Game(models.Model):
@@ -105,6 +105,7 @@ class Game(models.Model):
     gender = fields.Char(string="Gender")
     platform = fields.Char(string="Platform")
     description = fields.Text()
+    score = fields.Float()
     # game_id = fields.Many2many('gametournament.tournament', ondelete='cascade', string='Tournament')
     # games = fields.Char(string="Game Names", compute='_compute_name_display')
     tournament_ids = fields.Many2many('gametournament.tournament', 'game_tournament_rel', 'game_id', 'tournament_id',

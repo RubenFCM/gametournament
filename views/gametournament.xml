@@ -144,6 +144,7 @@
                 <field name="gender"/>
                 <field name="platform"/>
                 <field name="description"/>
+                <field name="score"/>
                 <field name="tournament_names"/>
             </tree>
         </field>
