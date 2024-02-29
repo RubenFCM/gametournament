@@ -87,15 +87,7 @@ class Inscription(models.Model):
 
         return super(Inscription, self).create(values)
 
-    # def write(self, values):
-    #     if 'inscription_id' in values:
-    #         # Check if the tournament has reached its maximum participants
-    #         tournament_id = values.get('inscription_id')
-    #         tournament = self.env['gametournament.tournament'].browse(tournament_id)
-    #         if tournament.taken_participants >= tournament.participants:
-    #             raise ValidationError("Maximum number of participants reached for this tournament!")
-    # 
-    #     return super(Inscription, self).write(values)
+
 
 
 class Game(models.Model):
